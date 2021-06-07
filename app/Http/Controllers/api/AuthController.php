@@ -7,6 +7,8 @@ use Carbon\Exceptions\Exception as ExceptionsException;
 use Exception;
 use Illuminate\Http\Request;
 use Hash;
+use Auth;
+use JWTAuth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -25,6 +27,18 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'Erro interno do servidor!'], 500);
         }
+    }
+
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
+
+    public function logout()
+    {
+        JWTAuth::invalidate(JWTAuth::getToken());
+
+        return response()->json(['message' => 'Usuário deslogado com sucesso!']);
     }
 
     protected function respondWithToken($token)
